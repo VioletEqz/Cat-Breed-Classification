@@ -44,6 +44,7 @@ class Network:
             loss, tmp_loss, num_corr = 0, 0, 0
             initial_time = time.time()
             for i in range(len(dataset['train_images'])):
+                print(i,sep=' ',end='')
                 if i % print_cycle == (print_cycle-1):
                     accuracy = (num_corr / (i + 1)) * 100       # compute training accuracy and loss up to iteration i
                     loss = tmp_loss / (i + 1)
@@ -108,10 +109,10 @@ class Network:
             tmp_output = self.forward(X[i], plot_feature_maps)              # forward propagation
 
             # compute cross-entropy update loss
-            loss += regularized_cross_entropy(self.layers, regularization, tmp_output[y[i]])
+            loss += regularized_cross_entropy(self.layers, regularization, tmp_output[int(y[i])])
 
             prediction = np.argmax(tmp_output)                              # update accuracy
-            if prediction == y[i]:
+            if prediction == int(y[i]):
                 num_correct += 1
                 if plot_correct:                                            # plot correctly classified digit
                     image = (X[i] * 255)[0, :, :]
@@ -120,7 +121,7 @@ class Network:
             else:
                 if plot_missclassified:                                     # plot missclassified digit
                     image = (X[i] * 255)[0, :, :]
-                    plot_sample(image, y[i], prediction)
+                    plot_sample(image, iny(y[i]), prediction)
                     plot_missclassified = 1
 
         test_size = len(X)
