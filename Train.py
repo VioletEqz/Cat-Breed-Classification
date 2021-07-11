@@ -60,5 +60,5 @@ if __name__ == '__main__':
         plot_missclassified,
         plot_feature_maps,
         verbose,
-        print_cycle=50
+        print_cycle=2
     )

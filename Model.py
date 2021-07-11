@@ -37,14 +37,14 @@ class Network:
         for layer in reversed(self.layers):
             gradient = layer.backward(gradient, learning_rate)
 
-    def train(self, dataset, num_epochs, learning_rate, validate, regularization, plot_weights, verbose, print_cycle=50):
+    def train(self, dataset, num_epochs, learning_rate, validate, regularization, plot_weights, verbose, print_cycle=2):
         history = {'loss': [], 'accuracy': [], 'val_loss': [], 'val_accuracy': []}
         for epoch in range(1, num_epochs + 1):
             print('\n--- Epoch {0} ---'.format(epoch))
             loss, tmp_loss, num_corr = 0, 0, 0
             initial_time = time.time()
             for i in range(len(dataset['train_images'])):
-                print(i,sep=' ',end='')
+                print(i)
                 if i % print_cycle == (print_cycle-1):
                     accuracy = (num_corr / (i + 1)) * 100       # compute training accuracy and loss up to iteration i
                     loss = tmp_loss / (i + 1)
@@ -121,7 +121,7 @@ class Network:
             else:
                 if plot_missclassified:                                     # plot missclassified digit
                     image = (X[i] * 255)[0, :, :]
-                    plot_sample(image, iny(y[i]), prediction)
+                    plot_sample(image, int(y[i]), prediction)
                     plot_missclassified = 1
 
         test_size = len(X)
