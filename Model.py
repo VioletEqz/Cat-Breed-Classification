@@ -2,6 +2,8 @@ from Layer import Convolutional, Pooling, FullyConnected, Dense, regularized_cro
 from DataIO import plot_sample, plot_learning_curve, plot_accuracy_curve, plot_histogram
 import numpy as np
 import time
+import copy
+import pickle
 from tqdm import tqdm
 
 class Network:
@@ -11,14 +13,11 @@ class Network:
     def add_layer(self, layer):
         self.layers.append(layer)
 
-    def build_model(self, type):
-        self.add_layer(Convolutional(name='conv1', num_filters=16, stride=1, size=3, activation='relu'))    #1x128x128 --> 16x126x126
-        self.add_layer(Convolutional(name='conv2', num_filters=8, stride=2, size=3, activation='relu'))     #16x126x126 --> 8x63x63
-        self.add_layer(Pooling(name='pool1', stride=2, size=2))                                             #8x63x63 --> 8x31x31
-        self.add_layer(Convolutional(name='conv3', num_filters=4, stride=2, size=3, activation='relu'))     #8x31x31 --> 4x15x15
-        self.add_layer(Pooling(name='pool2', stride=2, size=2))                                             #4x15x15 --> 4x7x7
-        self.add_layer(FullyConnected(name='fullyconnected', nodes1=4*7*7, nodes2=64, activation='relu'))   #4x7x7 --> 64 nodes
-        self.add_layer(Dense(name='dense', nodes=64, num_classes=4))                                        #64 nodes--> 4 classes   
+    def build_model(self):
+        self.add_layer(Convolutional(name='conv1', num_filters=8, stride=2, size=3, activation='relu')) #1x48x48 --> 8x24x24
+        self.add_layer(Convolutional(name='conv2', num_filters=8, stride=2, size=3, activation='relu')) #8x24x24 --> 8x12x12
+        self.add_layer(Pooling(name='pool1', stride=2, size=2))                                            
+        self.add_layer(Dense(name='dense', nodes=8*7*7, num_classes=4))
 
     def forward(self, image, plot_feature_maps):                # forward propagate
         for layer in self.layers:
@@ -39,7 +38,6 @@ class Network:
             loss, tmp_loss, num_corr = 0, 0, 0
             initial_time = time.time()
             for i in range(len(dataset['train_images'])):
-                print(i,end=' ')
                 if i % print_cycle == (print_cycle-1):
                     accuracy = (num_corr / (i + 1)) * 100       # compute training accuracy and loss up to iteration i
                     loss = tmp_loss / (i + 1)
@@ -98,16 +96,20 @@ class Network:
                 if 'pool' not in layer.name:
                     plot_histogram(layer.name, layer.get_weights())
 
+    def predict(self,image):
+        tmp_output = self.forward(image, plot_feature_maps=0)
+        return tmp_output
+
     def evaluate(self, X, y, regularization, plot_correct, plot_missclassified, plot_feature_maps, verbose):
         loss, num_correct = 0, 0
         for i in tqdm(range(len(X))):
             tmp_output = self.forward(X[i], plot_feature_maps)              # forward propagation
 
             # compute cross-entropy update loss
-            loss += regularized_cross_entropy(self.layers, regularization, tmp_output[int(y[i])])
+            loss += regularized_cross_entropy(self.layers, regularization, tmp_output[y[i]])
 
             prediction = np.argmax(tmp_output)                              # update accuracy
-            if prediction == int(y[i]):
+            if prediction == y[i]:
                 num_correct += 1
                 if plot_correct:                                            # plot correctly classified digit
                     image = (X[i] * 255)[0, :, :]
@@ -116,7 +118,7 @@ class Network:
             else:
                 if plot_missclassified:                                     # plot missclassified digit
                     image = (X[i] * 255)[0, :, :]
-                    plot_sample(image, int(y[i]), prediction)
+                    plot_sample(image, y[i], prediction)
                     plot_missclassified = 1
 
         test_size = len(X)
@@ -126,3 +128,21 @@ class Network:
             print('Test Loss: %02.3f' % loss)
             print('Test Accuracy: %02.3f' % accuracy)
         return loss, accuracy
+
+    def save(self, path):
+
+    # Make a deep copy of current model instance
+        model = copy.deepcopy(self)
+
+        with open(path, 'wb') as f:
+            pickle.dump(model, f)
+            
+    @staticmethod
+    def load(path):
+
+        # Open file in the binary-read mode, load a model
+        with open(path, 'rb') as f:
+            model = pickle.load(f)
+
+        # Return a model
+        return model

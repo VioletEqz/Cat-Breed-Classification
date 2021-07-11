@@ -12,7 +12,7 @@ def load_file(path):
         x = pickle.load(f)
     return x
 
-def load_data(train_rate=85,val_rate=10):
+def load_data(train_rate=85,val_rate=5):
     X = load_file('data/img')
     y = load_file('data/label')
     if (100-train_rate-val_rate<=0):
@@ -104,12 +104,3 @@ def plot_histogram(layer_name, layer_weights):
     plt.xlabel('Value')
     plt.ylabel('Number')
     plt.show()
-
-
-def to_gray(image_name):
-    image = cv2.imread(image_name + '.png')
-    image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
-    cv2.imshow('Gray image', image)
-    cv2.imwrite(image_name + '.png', image)
-    cv2.waitKey(0)
-    cv2.destroyAllWindows()

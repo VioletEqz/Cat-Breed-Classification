@@ -1,29 +1,5 @@
 import numpy as np
 
-
-def softmax(x):
-    return np.exp(x) / np.sum(np.exp(x), axis=0)
-
-
-def cross_entropy(x):
-    return -np.log(x)
-
-
-def regularized_cross_entropy(layers, lam, x):
-    loss = cross_entropy(x)
-    for layer in layers:
-        loss += lam * (np.linalg.norm(layer.get_weights()) ** 2)
-    return loss
-
-
-def leakyReLU(x, alpha=0.001):
-    return x * alpha if x < 0 else x
-
-
-def leakyReLU_derivative(x, alpha=0.01):
-    return alpha if x < 0 else 1
-
-
 def lr_schedule(learning_rate, iteration):
     if iteration >= 0:
         return learning_rate
@@ -243,3 +219,24 @@ class Dense:                                        # dense layer with softmax a
 
     def get_weights(self):
         return np.reshape(self.weights, -1)
+
+def leakyReLU(x, alpha=0.001):
+    return x * alpha if x < 0 else x
+
+
+def leakyReLU_derivative(x, alpha=0.01):
+    return alpha if x < 0 else 1
+
+def softmax(x):
+    return np.exp(x) / np.sum(np.exp(x), axis=0)
+
+
+def cross_entropy(x):
+    return -np.log(x)
+
+def regularized_cross_entropy(layers, lam, x):
+    loss = cross_entropy(x)
+    for layer in layers:
+        loss += lam * (np.linalg.norm(layer.get_weights()) ** 2)
+    return loss
+
