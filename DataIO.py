@@ -13,8 +13,8 @@ def load_file(path):
     return x
 
 def load_data(train_rate=85,val_rate=10):
-    X = load_file('data\\img')
-    y = load_file('data\\label')
+    X = load_file('data/img')
+    y = load_file('data/label')
     if (100-train_rate-val_rate<=0):
         return None
     num_train = int(X.shape[0] / 100 * train_rate)
