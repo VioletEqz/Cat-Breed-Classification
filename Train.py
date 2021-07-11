@@ -48,7 +48,8 @@ if __name__ == '__main__':
         validate,
         regularization,
         plot_weights,
-        verbose
+        verbose,
+        print_cycle=50
     )
 
     print('\n--- Testing the model ---')                                    # test model
@@ -59,6 +60,5 @@ if __name__ == '__main__':
         plot_correct,
         plot_missclassified,
         plot_feature_maps,
-        verbose,
-        print_cycle=2
+        verbose
     )

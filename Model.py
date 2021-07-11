@@ -12,18 +12,13 @@ class Network:
         self.layers.append(layer)
 
     def build_model(self, type):
-        if type is 'mnist':
-            self.add_layer(Convolutional(name='conv1', num_filters=8, stride=2, size=3, activation='relu'))
-            self.add_layer(Convolutional(name='conv2', num_filters=8, stride=2, size=3, activation='relu'))
-            self.add_layer(Dense(name='dense', nodes=8 * 6 * 6, num_classes=10))
-        else:
-            self.add_layer(Convolutional(name='conv1', num_filters=16, stride=1, size=3, activation='relu'))    #1x128x128 --> 16x126x126
-            self.add_layer(Convolutional(name='conv2', num_filters=8, stride=2, size=3, activation='relu'))     #16x126x126 --> 8x63x63
-            self.add_layer(Pooling(name='pool1', stride=2, size=2))                                             #8x63x63 --> 8x31x31
-            self.add_layer(Convolutional(name='conv3', num_filters=4, stride=2, size=3, activation='relu'))     #8x31x31 --> 4x15x15
-            self.add_layer(Pooling(name='pool2', stride=2, size=2))                                             #4x15x15 --> 4x7x7
-            self.add_layer(FullyConnected(name='fullyconnected', nodes1=4*7*7, nodes2=64, activation='relu'))   #4x7x7 --> 64 nodes
-            self.add_layer(Dense(name='dense', nodes=64, num_classes=4))                                        #64 nodes--> 4 classes   
+        self.add_layer(Convolutional(name='conv1', num_filters=16, stride=1, size=3, activation='relu'))    #1x128x128 --> 16x126x126
+        self.add_layer(Convolutional(name='conv2', num_filters=8, stride=2, size=3, activation='relu'))     #16x126x126 --> 8x63x63
+        self.add_layer(Pooling(name='pool1', stride=2, size=2))                                             #8x63x63 --> 8x31x31
+        self.add_layer(Convolutional(name='conv3', num_filters=4, stride=2, size=3, activation='relu'))     #8x31x31 --> 4x15x15
+        self.add_layer(Pooling(name='pool2', stride=2, size=2))                                             #4x15x15 --> 4x7x7
+        self.add_layer(FullyConnected(name='fullyconnected', nodes1=4*7*7, nodes2=64, activation='relu'))   #4x7x7 --> 64 nodes
+        self.add_layer(Dense(name='dense', nodes=64, num_classes=4))                                        #64 nodes--> 4 classes   
 
     def forward(self, image, plot_feature_maps):                # forward propagate
         for layer in self.layers:
@@ -44,7 +39,7 @@ class Network:
             loss, tmp_loss, num_corr = 0, 0, 0
             initial_time = time.time()
             for i in range(len(dataset['train_images'])):
-                print(i)
+                print(i,end=' ')
                 if i % print_cycle == (print_cycle-1):
                     accuracy = (num_corr / (i + 1)) * 100       # compute training accuracy and loss up to iteration i
                     loss = tmp_loss / (i + 1)
