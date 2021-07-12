@@ -1,0 +1,4 @@
+Munchkin: 0
+Persian: 1
+Siamese: 2
+Sphynx - Hairless Cat: 3
