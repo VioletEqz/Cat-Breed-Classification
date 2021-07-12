@@ -1,4 +1,4 @@
-from Layer import Convolutional, Pooling, FullyConnected, Dense, regularized_cross_entropy, lr_schedule
+from Layer import Convolutional, Pooling, Dense, regularized_cross_entropy, lr_schedule
 from DataIO import plot_sample, plot_learning_curve, plot_accuracy_curve, plot_histogram
 import numpy as np
 import time
@@ -14,8 +14,8 @@ class Network:
         self.layers.append(layer)
 
     def build_model(self):
-        self.add_layer(Convolutional(name='conv1', num_filters=8, stride=2, size=3, activation='relu')) #1x48x48 --> 8x24x24
-        self.add_layer(Convolutional(name='conv2', num_filters=8, stride=2, size=3, activation='relu')) #8x24x24 --> 8x12x12
+        self.add_layer(Convolutional(name='conv1', num_filters=8, stride=2, size=3, activation='relu')) 
+        self.add_layer(Convolutional(name='conv2', num_filters=8, stride=2, size=3, activation='relu')) 
         self.add_layer(Pooling(name='pool1', stride=2, size=2))                                            
         self.add_layer(Dense(name='dense', nodes=8*7*7, num_classes=4))
 
