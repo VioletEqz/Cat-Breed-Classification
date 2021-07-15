@@ -14,8 +14,10 @@ class Network:
         self.layers.append(layer)
 
     def build_model(self):
-        self.add_layer(Convolutional(name='conv1', num_filters=8, stride=2, size=3, activation='relu')) 
+        self.add_layer(Convolutional(name='conv1', num_filters=8, stride=2, size=3, activation='relu'))
+        self.layers[0].filters = np.random.normal(0,np.sqrt(2/(3*3*1)),(8,3,3))
         self.add_layer(Convolutional(name='conv2', num_filters=8, stride=2, size=3, activation='relu')) 
+        self.layers[1].filters = np.random.normal(0,np.sqrt(2/(3*3*8)),(8,3,3))
         self.add_layer(Pooling(name='pool1', stride=2, size=2))                                            
         self.add_layer(Dense(name='dense', nodes=8*7*7, num_classes=4))
 
@@ -88,7 +90,7 @@ class Network:
         if verbose:
             print('Train Loss: %02.3f' % (history['loss'][-1]))
             print('Train Accuracy: %02.3f' % (history['accuracy'][-1]))
-            plot_learning_curve(history['loss'])
+            plot_learning_curve(history['loss'],history['val_loss'])
             plot_accuracy_curve(history['accuracy'], history['val_accuracy'])
 
         if plot_weights:

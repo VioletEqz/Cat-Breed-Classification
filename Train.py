@@ -3,8 +3,9 @@ from DataIO import preprocess, load_data
 
 if __name__ == '__main__':
 
-    num_epochs = 5
+    num_epochs = 3
     learning_rate = 0.005
+    regularization = 0
     validate = 1
     verbose = 1
     plot_weights = 1
@@ -27,7 +28,7 @@ if __name__ == '__main__':
         num_epochs,
         learning_rate,
         validate,
-        0,
+        regularization,
         plot_weights,
         verbose,
         print_cycle=250
@@ -37,7 +38,7 @@ if __name__ == '__main__':
     model.evaluate(
         dataset['test_images'],
         dataset['test_labels'],
-        0,
+        regularization,
         plot_correct,
         plot_missclassified,
         plot_feature_maps,

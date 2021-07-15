@@ -78,8 +78,9 @@ def plot_accuracy_curve(accuracy_history, val_accuracy_history):
     plt.show()
 
 
-def plot_learning_curve(loss_history):
-    plt.plot(loss_history, 'b', linewidth=3.0, label='Cross entropy')
+def plot_learning_curve(loss_history, val_loss_history):
+    plt.plot(loss_history, 'b', linewidth=3.0, label='Train Loss')
+    plt.plot(val_loss_history, 'r', linewidth=3.0, label='Val Loss')
     plt.xlabel('Iteration', fontsize=16)
     plt.ylabel('Loss', fontsize=16)
     plt.legend()

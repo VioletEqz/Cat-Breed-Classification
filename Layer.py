@@ -13,7 +13,8 @@ class Convolutional:                                        # convolution layer 
 
     def __init__(self, name, num_filters=16, stride=1, size=3, activation=None):
         self.name = name
-        self.filters = np.random.randn(num_filters, 3, 3) * 0.1
+        #self.filters = np.random.randn(num_filters, 3, 3) * 0.1
+        self.filters = np.random.normal(0,np.sqrt(2/(3*3*num_filters)),(num_filters,3,3))
         self.stride = stride
         self.size = size
         self.activation = activation
@@ -131,7 +132,7 @@ class Pooling:                                              # max pooling layer 
 class Dense:                                        # dense layer with softmax activation
     def __init__(self, name, nodes, num_classes):
         self.name = name
-        self.weights = np.random.randn(nodes, num_classes) * 0.1
+        self.weights = np.random.randn(nodes, num_classes) * np.sqrt(2/(nodes))
         self.biases = np.zeros(num_classes)
         self.last_input_shape = None
         self.last_input = None
